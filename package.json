@@ -1,0 +1,15 @@
+{
+  "name": "ProjetoControleDeGastos",
+  "version": "1.0.0",
+  "description": "Controle de Gastos",
+  "main": "index.js",
+  "author": "Leandro Paranhos",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.0",
+    "firebase-admin": "^6.5.1",
+    "body-parser": "^1.18.3",
+    "consign": "^0.1.6",
+    "cors": "^2.8.5"
+  }
+}
