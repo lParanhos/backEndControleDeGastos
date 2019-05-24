@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Leandro Paranhos",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "express": "^4.17.0",
     "firebase-admin": "^6.5.1",
