@@ -48,7 +48,7 @@ module.exports = routes => {
     routes.put('/gastos/:id', async (req, res) => {
         try {
             await db.doc(req.params.id).update(req.body)
-            return res.send(`A vaga ${req.params.id} foi atualizada com sucesso`)
+            return res.send(`Registro ${req.params.id} foi atualizado com sucesso`)
         }
         catch (error) {
             return res.status(500).send(error)
@@ -65,6 +65,29 @@ module.exports = routes => {
             return res.status(500).send(error)
         }
     })
+
+
+    routes.get('/valores', async (req, res) => {
+        try {
+            let docs = await db.get();
+            let valores = [];
+
+            docs.forEach(valor => {
+                valores.push(extractValores(valor));
+            });
+            let total = valores.reduce((anterior, atual) => anterior + atual);
+            return res.json(total);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send('Erro no servidor');
+        }
+    })
+
+    // Metodos extratores e "conversores" de dados
+    extractValores = registro => {
+        let v = registro.data();
+        return (v.Valor)
+    }
 
     extractGastos = gasto => {
         let v = gasto.data();
