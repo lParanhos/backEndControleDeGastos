@@ -75,7 +75,7 @@ module.exports = routes => {
             docs.forEach(valor => {
                 valores.push(extractValores(valor));
             });
-            let total = valores.reduce((anterior, atual) => anterior + atual);
+            let total = valores.reduce((anterior, atual) => parseFloat(anterior)  + parseFloat(atual) );
             return res.json(total);
         } catch (error) {
             console.log(error);
