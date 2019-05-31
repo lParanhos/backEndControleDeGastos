@@ -24,7 +24,7 @@ module.exports = routes => {
             let convTotalGastos = totalGastos.toLocaleString('pt-br', { minimumFractionDigits: 2 });
 
 
-            return res.json({ totalGasto: convTotalGastos, aReceber: convTotalReceber })
+            return res.send({ totalGasto: convTotalGastos, aReceber: convTotalReceber })
         } catch (error) {
             console.log(error);
             return res.status(500).send('Erro no servidor')
