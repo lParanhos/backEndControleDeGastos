@@ -13,7 +13,7 @@ module.exports = routes => {
                 receber.push(extratorDeValores(item))
             });
             let totalReceber = receber.reduce((anterior, atual) => parseFloat(anterior) + parseFloat(atual));
-            let convTotalReceber = totalReceber.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            let convTotalReceber = totalReceber.toLocaleString('pt-br', { minimumFractionDigits: 2 });
 
             let docs_gastos = await db_total.get();
             let gastos = [];
@@ -21,7 +21,7 @@ module.exports = routes => {
                 gastos.push(extratorDeValores(item))
             });
             let totalGastos = gastos.reduce((anterior, atual) => parseFloat(anterior) + parseFloat(atual));
-            let convTotalGastos = totalGastos.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+            let convTotalGastos = totalGastos.toLocaleString('pt-br', { minimumFractionDigits: 2 });
 
 
             return res.json({ totalGasto: convTotalGastos, aReceber: convTotalReceber })
