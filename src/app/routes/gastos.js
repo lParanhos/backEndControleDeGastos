@@ -69,13 +69,13 @@ module.exports = routes => {
 
     extractGastos = gasto => {
         let v = gasto.data();
-        console.log(v)
+        console.log("=>", v.Data)
         return {
             id: gasto.id,
             valor: v.Valor,
             local: v.Local,
-            parcela: v.Parcelado,
-            dataInsert: v.Data
+            data: v.Data,
+            //parcela: v.Parcelado,
         }
     }
 }
