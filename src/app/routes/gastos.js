@@ -9,6 +9,7 @@ module.exports = routes => {
             docs.forEach(gasto => {
                 gastos.push(extractGastos(gasto))
             });
+            // console.log(gastos)
             return res.send(gastos)
         } catch (error) {
             console.log(error)
@@ -66,36 +67,15 @@ module.exports = routes => {
         }
     })
 
-
-    routes.get('/valores', async (req, res) => {
-        try {
-            let docs = await db.get();
-            let valores = [];
-
-            docs.forEach(valor => {
-                valores.push(extractValores(valor));
-            });
-            let total = valores.reduce((anterior, atual) => parseFloat(anterior)  + parseFloat(atual) );
-            return res.json(total);
-        } catch (error) {
-            console.log(error);
-            return res.status(500).send('Erro no servidor');
-        }
-    })
-
-    // Metodos extratores e "conversores" de dados
-    extractValores = registro => {
-        let v = registro.data();
-        return (v.Valor)
-    }
-
     extractGastos = gasto => {
         let v = gasto.data();
         console.log(v)
         return {
             id: gasto.id,
             valor: v.Valor,
-            local: v.Local
+            local: v.Local,
+            parcela: v.Parcelado,
+            dataInsert: v.DataLancamento
         }
     }
 }
