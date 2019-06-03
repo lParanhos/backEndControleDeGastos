@@ -75,7 +75,7 @@ module.exports = routes => {
             valor: v.Valor,
             local: v.Local,
             parcela: v.Parcelado,
-            dataInsert: v.DataLancamento
+            dataInsert: v.Data
         }
     }
 }
