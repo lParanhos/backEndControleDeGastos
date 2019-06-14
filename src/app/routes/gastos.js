@@ -2,6 +2,7 @@ module.exports = routes => {
 
     const db = routes.src.config.firebaseConfig.collection('gastos')
 
+    //Pega todos os registros
     routes.get('/gastos', async (req, res) => {
         try {
             let docs = await db.get();
@@ -17,6 +18,7 @@ module.exports = routes => {
         }
     });
 
+    //Pega um registro especifico
     routes.get('/gastos/:id', async (req, res) => {
         try {
             const id = req.params.id;
@@ -33,7 +35,7 @@ module.exports = routes => {
 
         }
     })
-
+    //Adiciona um registro
     routes.post('/gastos', async (req, res) => {
         try {
 
@@ -45,7 +47,7 @@ module.exports = routes => {
         }
     });
 
-
+    //Edita um registro
     routes.put('/gastos/:id', async (req, res) => {
         try {
             await db.doc(req.params.id).update(req.body)
@@ -55,7 +57,7 @@ module.exports = routes => {
             return res.status(500).send(error)
         }
     })
-
+    //Deleta um registro
     routes.delete('/gastos/:id', async (req, res) => {
         console.log('Fui chamado')
         try {
