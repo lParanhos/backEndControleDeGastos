@@ -54,7 +54,7 @@ module.exports = routes => {
             id: salario.id,
             de: v.De,
             valor: v.Valor,
-            quandoReceber: v.quando,
+            dataLancamento: v.dataLancamento,
             recebido: v.recebido
         }
     }
