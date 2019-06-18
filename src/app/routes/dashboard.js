@@ -4,13 +4,13 @@ module.exports = routes => {
     let db_total = routes.src.config.firebaseConfig.collection('gastos');
 
 
-    routes.get('/dash', async (req, res) => {
-
+    routes.get('/dash/:data', async (req, res) => {
+        const { data } = req.params;
         try {
             let docs_receber = await db_receber.get();
             let receber = [];
             docs_receber.forEach(item => {
-                receber.push(extratorDeValores(item))
+                receber.push(extratorDeValores(item, data))
             });
             let totalReceber = receber.reduce((anterior, atual) => parseFloat(anterior) + parseFloat(atual));
             let convTotalReceber = totalReceber.toLocaleString('pt-br', { minimumFractionDigits: 2 });
@@ -18,7 +18,7 @@ module.exports = routes => {
             let docs_gastos = await db_total.get();
             let gastos = [];
             docs_gastos.forEach(item => {
-                gastos.push(extratorDeValores(item))
+                gastos.push(extratorDeValores(item, data))
             });
             let totalGastos = gastos.reduce((anterior, atual) => parseFloat(anterior) + parseFloat(atual));
             let convTotalGastos = totalGastos.toLocaleString('pt-br', { minimumFractionDigits: 2 });
@@ -32,8 +32,15 @@ module.exports = routes => {
     })
 
 
-    extratorDeValores = valores => {
+    extratorDeValores = (valores, data) => {
         let v = valores.data();
-        return (v.Valor)
+        let mes = parseInt(data.split('-')[0]);
+        let ano = parseInt(data.split('-')[1]);
+        console.log(v.mes === mes && v.ano === ano)
+        if (v.mes === mes && v.ano === ano) {
+            console.log(typeof (v.valor))
+            return (v.valor)
+        }
+        else return (0)
     }
 }

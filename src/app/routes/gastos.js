@@ -38,7 +38,6 @@ module.exports = routes => {
     //Adiciona um registro
     routes.post('/gastos', async (req, res) => {
         try {
-
             let result = await db.add(req.body);
 
             return res.send(result.id)
@@ -71,12 +70,12 @@ module.exports = routes => {
 
     extractGastos = gasto => {
         let v = gasto.data();
-        console.log("=>", v.Data)
+        console.log("=>", v.data)
         return {
             id: gasto.id,
-            valor: v.Valor,
-            local: v.Local,
-            data: v.Data,
+            valor: v.valor,
+            local: v.local,
+            data: `${v.dia}/${v.mes}/${v.ano}`,
             //parcela: v.Parcelado,
         }
     }
