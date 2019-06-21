@@ -52,9 +52,11 @@ module.exports = routes => {
         let v = salario.data();
         return {
             id: salario.id,
-            de: v.De,
-            valor: v.Valor,
-            dataLancamento: v.dataLancamento,
+            de: v.de,
+            valor: v.valor,
+            ano: v.ano,
+            mes: v.mes,
+            dia: v.dia,
             recebido: v.recebido
         }
     }
