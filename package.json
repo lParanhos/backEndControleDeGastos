@@ -9,10 +9,11 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.17.0",
-    "firebase-admin": "^6.5.1",
     "body-parser": "^1.18.3",
     "consign": "^0.1.6",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "express": "^4.17.0",
+    "firebase-admin": "^6.5.1",
+    "googleapis": "39"
   }
 }

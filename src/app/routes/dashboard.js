@@ -22,9 +22,9 @@ module.exports = routes => {
             });
             let totalGastos = gastos.reduce((anterior, atual) => parseFloat(anterior) + parseFloat(atual));
             let convTotalGastos = totalGastos.toLocaleString('pt-br', { minimumFractionDigits: 2 });
+            let sobra = parseFloat(totalReceber) - parseFloat(totalGastos)
 
-
-            return res.send({ totalGasto: convTotalGastos, aReceber: convTotalReceber })
+            return res.send({ totalGasto: convTotalGastos, aReceber: convTotalReceber, restou: sobra.toFixed(2) })
         } catch (error) {
             console.log(error);
             return res.status(500).send('Erro no servidor')
