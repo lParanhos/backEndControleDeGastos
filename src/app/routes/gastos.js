@@ -3,13 +3,16 @@ module.exports = routes => {
     const db = routes.src.config.firebaseConfig.collection('gastos')
 
     //Pega todos os registros
-    routes.get('/gastos', async (req, res) => {
+    routes.get('/gastos/:date', async (req, res) => {
+        let { date } = req.params;
         try {
             let docs = await db.get();
             let gastos = [];
             docs.forEach(gasto => {
-                gastos.push(extractGastos(gasto))
+                gastos.push(extractGastos(gasto, date))
             });
+            //Remove o gasto null caso tenha
+            gastos = gastos.filter(gasto => gasto != null)
             // console.log(gastos)
             return res.send(gastos)
         } catch (error) {
@@ -19,7 +22,7 @@ module.exports = routes => {
     });
 
     //Pega um registro especifico
-    routes.get('/gastos/:id', async (req, res) => {
+    routes.get('/gasto/:id', async (req, res) => {
         try {
             const id = req.params.id;
 
@@ -37,8 +40,15 @@ module.exports = routes => {
     })
     //Adiciona um registro
     routes.post('/gastos', async (req, res) => {
+        const { mes, ano, qtdParcelas } = req.body;
+        let newRangeMouths = [];
+        for (let i = 0; i < (qtdParcelas ? qtdParcelas : 1); i++) {
+            if (mes + i > 12) newRangeMouths.push(`${(mes + i) - 12}/${ano + 1}`);
+            else newRangeMouths.push(`${mes + i}/${ano}`);
+        }
+        let newSubmit = { ...req.body, parcelas: newRangeMouths }
         try {
-            let result = await db.add(req.body);
+            let result = await db.add(newSubmit);
 
             return res.send(result.id)
         } catch (error) {
@@ -47,7 +57,7 @@ module.exports = routes => {
     });
 
     //Edita um registro
-    routes.put('/gastos/:id', async (req, res) => {
+    routes.put('/gasto/:id', async (req, res) => {
         try {
             await db.doc(req.params.id).update(req.body)
             return res.send(`Registro ${req.params.id} foi atualizado com sucesso`)
@@ -57,7 +67,7 @@ module.exports = routes => {
         }
     })
     //Deleta um registro
-    routes.delete('/gastos/:id', async (req, res) => {
+    routes.delete('/gasto/:id', async (req, res) => {
         console.log('Fui chamado')
         try {
             await db.doc(req.params.id).delete()
@@ -68,15 +78,42 @@ module.exports = routes => {
         }
     })
 
-    extractGastos = gasto => {
+    extractGastos = (gasto, date) => {
         let v = gasto.data();
-        console.log("=>", v.data)
-        return {
-            id: gasto.id,
-            valor: v.valor,
-            local: v.local,
-            data: `${v.dia}/${v.mes}/${v.ano}`,
-            //parcela: v.Parcelado,
+        if (date) {
+            let mes = parseInt(date.split('-')[0]);
+            let ano = parseInt(date.split('-')[1]);
+            let aux = date.replace("-", "/")
+            if (v.parcelado) {
+                if (v.parcelas.includes(aux) /* && v.ano === ano */) {
+                    let nParcela = v.parcelas.indexOf(aux) + 1;
+                    return {
+                        id: gasto.id,
+                        valor: v.valor,
+                        local: v.local,
+                        vencimento: `${v.dia}/${mes}/${ano}`,
+                        parcela: `${nParcela}/${v.parcelas.length}`,
+                        lancamento: v.dataLancamento
+                    }
+                }
+            } else if (v.mes === mes && v.ano === ano) {
+                return {
+                    id: gasto.id,
+                    valor: v.valor,
+                    local: v.local,
+                    vencimento: `${v.dia}/${v.mes}/${v.ano}`,
+                    lancamento: v.dataLancamento ? v.dataLancamento : `${v.dia}/${v.mes}/${v.ano}`,
+                }
+            }
+        } else {
+            return {
+                id: gasto.id,
+                valor: v.valor,
+                local: v.local,
+                data: `${v.dia}/${v.mes}/${v.ano}`,
+                //parcela: v.Parcelado,
+            }
         }
     }
+
 }
