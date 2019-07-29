@@ -5,6 +5,7 @@ module.exports = routes => {
     //Pega todos os registros
     routes.get('/gastos/:date', async (req, res) => {
         let { date } = req.params;
+        console.log("ola")
         try {
             let docs = await db.get();
             let gastos = [];
@@ -41,6 +42,7 @@ module.exports = routes => {
     //Adiciona um registro
     routes.post('/gastos', async (req, res) => {
         const { mes, ano, qtdParcelas } = req.body;
+        console.log("body => ", req.body);
         let newRangeMouths = [];
         for (let i = 0; i < (qtdParcelas ? qtdParcelas : 1); i++) {
             if (mes + i > 12) newRangeMouths.push(`${(mes + i) - 12}/${ano + 1}`);
@@ -48,9 +50,9 @@ module.exports = routes => {
         }
         let newSubmit = { ...req.body, parcelas: newRangeMouths }
         try {
-            let result = await db.add(newSubmit);
+             let result = await db.add(newSubmit);
 
-            return res.send(result.id)
+            return res.send(result)
         } catch (error) {
             return res.status(500).send(error);
         }
@@ -96,7 +98,7 @@ module.exports = routes => {
                         lancamento: v.dataLancamento
                     }
                 }
-            } else if (v.mes === mes && v.ano === ano) {
+            } else if (v.dataLancamento.includes(`${mes}/${ano}`)) {
                 return {
                     id: gasto.id,
                     valor: v.valor,

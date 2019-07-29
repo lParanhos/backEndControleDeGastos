@@ -34,13 +34,28 @@ module.exports = routes => {
 
     extratorDeValores = (valores, date) => {
         let v = valores.data();
-        let mes = parseInt(date.split('-')[0]);
-        let ano = parseInt(date.split('-')[1]);
-        console.log(v.mes === mes && v.ano === ano)
-        if (v.mes === mes && v.ano === ano) {
-            console.log(typeof (v.valor))
-            return (v.valor)
+        /*  console.log(v) */
+        let mes = null;
+        let ano = null;
+
+        console.log("aqui")
+        mes = parseInt(date.split('-')[0]);
+        ano = parseInt(date.split('-')[1]);
+
+        /**
+         * Quebrar a data de lançamento...
+         * para pegar mes e ano
+         * pode ser legal já deixar configurado para dia também
+         */
+
+
+        /*  console.log(v.mes === mes && v.ano === ano) */
+        if (v.dataLancamento) {
+            if (v.mes === mes && v.ano === ano) {
+                console.log(typeof (v.valor))
+                return (v.valor)
+            }
+            else return (0)
         }
-        else return (0)
     }
-}
+    }
