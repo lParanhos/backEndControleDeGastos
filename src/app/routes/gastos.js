@@ -59,8 +59,16 @@ module.exports = routes => {
 
     //Edita um registro
     routes.put('/gasto/:id', async (req, res) => {
+        const { mes, ano, qtdParcelas } = req.body;
+        console.log("body => ", req.body);
+        let newRangeMouths = [];
+        for (let i = 0; i < (qtdParcelas ? qtdParcelas : 1); i++) {
+            if (mes + i > 12) newRangeMouths.push(`${(mes + i) - 12}/${ano + 1}`);
+            else newRangeMouths.push(`${mes + i}/${ano}`);
+        }
+        let newSubmit = { ...req.body, parcelas: newRangeMouths }
         try {
-            await db.doc(req.params.id).update(req.body)
+            await db.doc(req.params.id).update(newSubmit)
             return res.send(`Registro ${req.params.id} foi atualizado com sucesso`)
         }
         catch (error) {
