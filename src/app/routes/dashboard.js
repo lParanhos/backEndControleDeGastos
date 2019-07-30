@@ -10,7 +10,7 @@ module.exports = routes => {
             let docs_receber = await db_receber.get();
             let receber = [];
             docs_receber.forEach(item => {
-                receber.push(extratorDeValores(item, date))
+                receber.push(extratorDeValores(item, date, "receber"))
             });
             let totalReceber = receber.reduce((anterior, atual) => parseFloat(anterior) + parseFloat(atual));
             let convTotalReceber = totalReceber.toLocaleString('pt-br', { minimumFractionDigits: 2 });
@@ -18,7 +18,7 @@ module.exports = routes => {
             let docs_gastos = await db_total.get();
             let gastos = [];
             docs_gastos.forEach(item => {
-                gastos.push(extratorDeValores(item, date))
+                gastos.push(extratorDeValores(item, date, "gastos"))
             });
             let totalGastos = gastos.reduce((anterior, atual) => parseFloat(anterior) + parseFloat(atual));
             let convTotalGastos = totalGastos.toLocaleString('pt-br', { minimumFractionDigits: 2 });
@@ -32,7 +32,7 @@ module.exports = routes => {
     })
 
 
-    extratorDeValores = (valores, date) => {
+    extratorDeValores = (valores, date, tipo) => {
         let v = valores.data();
         /*  console.log(v) */
         let mes = null;
@@ -48,14 +48,10 @@ module.exports = routes => {
          * pode ser legal já deixar configurado para dia também
          */
 
-
-        /*  console.log(v.mes === mes && v.ano === ano) */
-        if (v.dataLancamento) {
-            if (v.mes === mes && v.ano === ano) {
-                console.log(typeof (v.valor))
-                return (v.valor)
-            }
-            else return (0)
+        if (v.mes === mes && v.ano === ano) {
+            console.log(typeof (v.valor))
+            return (v.valor)
         }
+        else return (0)
     }
-    }
+}
