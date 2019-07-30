@@ -49,7 +49,7 @@ module.exports = routes => {
          */
 
         if (v.mes === mes && v.ano === ano) {
-            console.log(typeof (v.valor))
+            
             return (v.valor)
         }
         else return (0)

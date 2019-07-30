@@ -5,7 +5,6 @@ module.exports = routes => {
     //Pega todos os registros
     routes.get('/gastos/:date', async (req, res) => {
         let { date } = req.params;
-        console.log("ola")
         try {
             let docs = await db.get();
             let gastos = [];
