@@ -105,7 +105,7 @@ module.exports = routes => {
                         lancamento: v.dataLancamento
                     }
                 }
-            } else if (v.dataLancamento.includes(`${mes}/${ano}`)) {
+            } else if (v.mes === mes && v.ano === ano) {
                 return {
                     id: gasto.id,
                     valor: v.valor,
