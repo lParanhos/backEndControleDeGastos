@@ -2,13 +2,13 @@ module.exports = routes => {
 
     const db = routes.src.config.firebaseConfig.collection('receber');
 
-    routes.get('/receber', async (req, res) => {
+    routes.get('/receber/:date', async (req, res) => {
         try {
             let docs = await db.get();
             let salarios = [];
 
             docs.forEach(salario => {
-                salarios.push(extractDados(salario))
+                salarios.push(extractDados(salario, req.params.date))
             })
             return res.send(salarios)
         } catch (error) {
@@ -48,16 +48,19 @@ module.exports = routes => {
         }
     })
 
-    extractDados = salario => {
+    extractDados = (salario, date) => {
         let v = salario.data();
-        return {
-            id: salario.id,
-            de: v.de,
-            valor: v.valor,
-            ano: v.ano,
-            mes: v.mes,
-            dia: v.dia,
-            recebido: v.recebido
-        }
+        let mes = date.split("-")[0]
+        let ano = date.split('-')[1]
+        if (v.ano === ano && v.mes === mes)
+            return {
+                id: salario.id,
+                de: v.de,
+                valor: v.valor,
+                ano: v.ano,
+                mes: v.mes,
+                dia: v.dia,
+                recebido: v.recebido
+            }
     }
 }
