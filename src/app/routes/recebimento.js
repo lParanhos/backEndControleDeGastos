@@ -10,6 +10,9 @@ module.exports = routes => {
             docs.forEach(salario => {
                 salarios.push(extractDados(salario, req.params.date))
             })
+
+            salarios = salarios.filter(s => s != null);
+
             return res.send(salarios)
         } catch (error) {
             console.log(error);
@@ -50,9 +53,10 @@ module.exports = routes => {
 
     extractDados = (salario, date) => {
         let v = salario.data();
-        let mes = date.split("-")[0]
-        let ano = date.split('-')[1]
-        if (v.ano === ano && v.mes === mes)
+        let mes = parseInt(date.split("-")[0])
+        let ano = parseInt(date.split('-')[1])
+        //console.log(typeof v.ano, typeof ano, ano)
+        if (v.ano === ano && v.mes === mes) {
             return {
                 id: salario.id,
                 de: v.de,
@@ -62,5 +66,6 @@ module.exports = routes => {
                 dia: v.dia,
                 recebido: v.recebido
             }
+        }
     }
 }
